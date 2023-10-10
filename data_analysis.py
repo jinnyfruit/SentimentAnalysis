@@ -1,21 +1,32 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import re
+import html
 
-data = pd.read_csv('data/train.csv')
-print(data.head())
+# Preprocess text function
+def preprocess_text(text):
+    # 1. Find #[xX]?\w+; and put '&' to the first
+    text = re.sub(r'(^|\D)#\w+;', lambda match: f'&{match.group()}' if match.group().startswith(
+        '#') else f'{match.group()[0]}&{match.group()[1:]}', text)
+    # 2. Convert HTML character to unicode
+    text = html.unescape(text)  # 수정된 부분
+    # 3. Remove http, https
+    text = re.sub(r'http\S+|https\S+', '', text)
+    # 4. Remove email
+    text = re.sub(r'\S+@\S+', '', text)
+    # 5. Remove twitter id
+    text = re.sub(r'@\w+', '', text)
+    # 6. Remove "&lt;/b&gt;"
+    text = re.sub(r'&lt;/b&gt;', '', text)
+    # 7. Remove &quot; and quot;
+    text = re.sub(r'&quot;|quot;', '', text)
+    # 8. Replace &amp; and amp; with &
+    text = re.sub(r'&amp;|amp;', '&', text)
+    # 9. Replace &lt; and lt; with <
+    text = re.sub(r'&lt;|lt;', '<', text)
+    # 10. Replace &gt; and gt; with >
+    text = re.sub(r'&gt;|gt;', '>', text)
+    # 11. Remove the text inside parentheses
+    text = re.sub(r'\(.*?\)', '', text)
+    # 12. Remove extra spaces
+    text = re.sub(r'\s+', ' ', text).strip()
 
-# 각 열에서 NULL 값의 개수를 확인
-null_counts = data.isnull().sum()
-print("Columns with NULL values:")
-print(null_counts)
-
-# 'sentiment' 열 값별 데이터 개수를 계산합니다.
-sentiment_counts = data['sentiment'].value_counts()
-
-# 각 sentiment 값의 백분율을 계산합니다.
-percentage = sentiment_counts / len(data) * 100
-
-# 결과를 출력합니다.
-print("Sentiment Percentage:")
-print(percentage.round(2))
+    return text
