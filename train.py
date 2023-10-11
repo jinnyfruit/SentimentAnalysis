@@ -13,8 +13,8 @@ train_data = pd.read_csv(f'splits/train_fold_{fold_num}.csv')
 val_data = pd.read_csv(f'splits/validation_fold_{fold_num}.csv')
 
 # Load tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base')
-model = AutoModelForSequenceClassification.from_pretrained('xlm-roberta-base', num_labels=3)  # Assuming 3 labels for sentiment
+tokenizer = AutoTokenizer.from_pretrained('facebook/muppet-roberta-large')
+model = AutoModelForSequenceClassification.from_pretrained('facebook/muppet-roberta-large', num_labels=3)  # Assuming 3 labels for sentiment
 
 # Create a custom dataset
 class SentimentDataset(Dataset):
@@ -38,8 +38,8 @@ class SentimentDataset(Dataset):
 train_dataset = SentimentDataset(train_data, tokenizer)
 val_dataset = SentimentDataset(val_data, tokenizer)
 
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
 # Define optimizer
 optimizer = AdamW(model.parameters(), lr=2e-5)
