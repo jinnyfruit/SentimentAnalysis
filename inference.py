@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoTokenizer
 import pandas as pd
+from transformers import AutoModelForSequenceClassification, AutoTokenizer  # 수정된 부분
 
 fold_num = 0
 
@@ -12,6 +13,7 @@ tokenizer = AutoTokenizer.from_pretrained('facebook/muppet-roberta-large')
 model_path = f'best_model_{fold_num}.pt'
 model = AutoModelForSequenceClassification.from_pretrained('facebook/muppet-roberta-large', num_labels=3)
 model.load_state_dict(torch.load(model_path))
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
 model.to(device)
 model.eval()
 
