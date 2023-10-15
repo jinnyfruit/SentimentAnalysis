@@ -38,15 +38,18 @@ class SentimentDataset(Dataset):
 train_dataset = SentimentDataset(train_data, tokenizer)
 val_dataset = SentimentDataset(val_data, tokenizer)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=128, shuffle=False)
 
 # Define optimizer
 optimizer = AdamW(model.parameters(), lr=2e-5)
 
 # Move model to GPU if available
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f"MPS 장치를 지원하도록 build가 되었는가? {torch.backends.mps.is_built()}")
+print(f"MPS 장치가 사용 가능한가? {torch.backends.mps.is_available()}")
+device = torch.device('mps' if torch.cuda.is_available() else 'cpu')
 model.to(device)
+
 
 # Training loop with early stopping based on Macro F1 Score
 best_f1 = 0
