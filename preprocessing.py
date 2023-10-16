@@ -1,8 +1,8 @@
 import pandas as pd
 
 # 파일 경로 설정
-input_csv_file = 'train0.csv'
-output_csv_file = 'preprocessed_train0.csv'
+input_csv_file = 'splits/train0.csv'
+output_csv_file = 'splits/preprocessed_train0.csv'
 
 # CSV 파일 불러오기
 data = pd.read_csv(input_csv_file)
