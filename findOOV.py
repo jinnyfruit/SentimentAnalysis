@@ -12,6 +12,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 oov_words = []
 for text in df['text']:
     tokens = tokenizer.tokenize(text)
+    print(tokens)
     oov_words.extend([word for word in tokens if word not in tokenizer.get_vocab()])
 
 # 중복 OOV 단어 제거 (선택 사항)
