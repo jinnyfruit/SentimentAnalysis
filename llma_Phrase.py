@@ -26,8 +26,9 @@ augmented_data = []
 # Generate paraphrases and store in dataaugmentation.csv
 for index, row in filtered_data.iterrows():
     text = row['text']
+    paraphrase_request = f"Please paraphrase this sentence : {text}"  # Modify the text request here
     sequences = pipeline(
-        text,
+        paraphrase_request,
         do_sample=True,
         top_k=10,
         num_return_sequences=1,
